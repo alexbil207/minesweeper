@@ -1,15 +1,18 @@
-'use strict';
+"use strict";
+
+localStorage.setItem("bestTime", 0);
 // object that holds all gamer states
 const gPlayerState = {
-  inGame: '😀',
-  winner: '😎',
-  dead: '💀',
-  lives: ['🤎', '🤎', '🤎'],
-  hits: ['💡', '💡', '💡'],
-  mineMark: '🚩',
-  mine: '💣',
+  inGame: "😀",
+  winner: "😎",
+  dead: "💀",
+  lives: ["🤎", "🤎", "🤎"],
+  hits: ["💡", "💡", "💡"],
+  mineMark: "🚩",
+  mine: "💣",
   isFirstClick: true,
-  isHint: false
+  isHint: false,
+  safeClick: 3
 };
 // object with game data
 const gGame = {
@@ -26,14 +29,13 @@ const gLevel = {
 // global varibales
 var gTimerInterval;
 var gBoard = [];
-var gElTable = document.querySelector('table');
-var gTimer = document.querySelector('.timer p');
+var gElTable = document.querySelector("table");
+var gTimer = document.querySelector(".timer p");
 
-window.addEventListener('load', initGame); // waiting to html to load
+window.addEventListener("load", initGame); // waiting to html to load
 
 function initGame() {
   // main functions that turns the game on
-  gGame.isOn = true;
   updateGamerState(gPlayerState.inGame);
   updateGamerLives(gPlayerState.lives);
   updateGamerHints(gPlayerState.hits);
@@ -44,36 +46,37 @@ function initGame() {
 
 function renderBoard() {
   // render board with given logic
-  var strHTML = '';
+  var strHTML = "";
   for (var i = 0; i < gLevel.SIZE; i++) {
-    strHTML += '<tr>';
+    strHTML += "<tr>";
     for (var j = 0; j < gLevel.SIZE; j++) {
       strHTML += `<td class='cell-${i}-${j}' onclick='cellClick(this)' 
                 oncontextmenu='flagClick(this)'></td > `;
     }
-    strHTML += '</tr>';
+    strHTML += "</tr>";
   }
   gElTable.innerHTML = strHTML;
 }
 
 function cellClick(cell) {
   // cheking and changing each cell
-  var location = cell.classList.value.split('-');
+  var location = cell.classList.value.split("-");
   var row = +location[1];
   var col = +location[2];
 
-  if (!gGame.isOn) return;
+  gGame.isOn = true;
 
-  if (cell.classList.value.includes('empty')) return // empty click protection
+  if (cell.classList.value.includes("empty")) return; // empty click protection
 
-  if (!gTimerInterval) gTimerInterval = setInterval(timer, 1000); // interval on
+  if (!gTimerInterval) gTimerInterval = setInterval(timer, 950); // interval on
 
   if (gPlayerState.isHint) {
     showHint(row, col); // hint click
     return;
   }
 
-  if (gPlayerState.isFirstClick) { //first click update
+  if (gPlayerState.isFirstClick) {
+    //first click update
     setMines(row, col);
     setNegsCount();
   }
@@ -82,23 +85,26 @@ function cellClick(cell) {
 
   if (gBoard[row][col].isShown || gBoard[row][col].isMarked) return; // marked and shown click protection
 
-
-  if (!gBoard[row][col].minesAroundCount && !gBoard[row][col].isMine) { // empty click recurtion
-    cell.classList.add('empty');
+  if (!gBoard[row][col].minesAroundCount && !gBoard[row][col].isMine) {
+    // empty click recurtion
+    cell.classList.add("empty");
     revealNegs(row, col); //Open all empty
   }
 
-  if (gBoard[row][col].isMine) { //mine click reveal
+  if (gBoard[row][col].isMine) {
+    //mine click reveal
     gPlayerState.lives.pop();
     updateGamerLives(gPlayerState.lives);
     cell.innerText = gPlayerState.mine;
   }
 
-  if (!gPlayerState.lives.length) { //end of lives
+  if (!gPlayerState.lives.length) {
+    //end of lives
     gameOver();
   }
 
-  if (gBoard[row][col].minesAroundCount) cell.innerText = gBoard[row][col].minesAroundCount; // show number
+  if (gBoard[row][col].minesAroundCount)
+    cell.innerText = gBoard[row][col].minesAroundCount; // show number
 
   gBoard[row][col].isShown = true; //update state
 
@@ -160,7 +166,8 @@ function showHint(row, col) {
   for (var i = row - 1; i <= row + 1; i++) {
     if (i < 0 || i >= gBoard.length) continue;
     for (var j = col - 1; j <= col + 1; j++) {
-      var elCell = document.querySelector(`.cell-${i}-${j}`)
+      if (j < 0 || j >= gBoard[i].length) continue;
+      var elCell = document.querySelector(`.cell-${i}-${j}`);
       elCell.innerText = gBoard[i][j].minesAroundCount;
     }
   }
@@ -171,14 +178,13 @@ function showHint(row, col) {
       for (var j = col - 1; j <= col + 1; j++) {
         if (j < 0 || j >= gBoard[i].length) continue;
         if (gBoard[i][j].isShown) continue;
-        var elCell = document.querySelector(`.cell-${i}-${j}`)
-        elCell.innerText = '';
+        var elCell = document.querySelector(`.cell-${i}-${j}`);
+        elCell.innerText = "";
       }
     }
-  }, 1000)
+  }, 1000);
   gPlayerState.isHint = false;
 }
-
 
 function timer() {
   //main timer func
@@ -189,18 +195,17 @@ function timer() {
 function flagClick(cell) {
   // right click mouse flag
   event.preventDefault();
-  if (cell.classList.value.includes('empty')) return
-  var location = cell.classList.value.split('-');
+  if (cell.classList.value.includes("empty")) return;
+  var location = cell.classList.value.split("-");
   var row = location[1];
   var col = location[2];
-  if (gBoard[row][col].isShown) return
+  if (gBoard[row][col].isShown) return;
   if (gBoard[row][col].isMarked) {
     gBoard[row][col].isMarked = false;
     if (gBoard[row][col].isMine) gGame.markedCount--;
     gLevel.MINES++;
     updateMinesCount();
-    cell.innerText = '';
-
+    cell.innerText = "";
   } else {
     if (!gLevel.MINES) return;
     gBoard[row][col].isMarked = true;
@@ -252,20 +257,48 @@ function checkWinning() {
     gGame.isOn = false;
     clearInterval(gTimerInterval);
     updateGamerState(gPlayerState.winner);
+    var bestTime = +localStorage.getItem("bestTime");
+    if (bestTime > gGame.secsPassed || bestTime === 0) {
+      localStorage.setItem("bestTime", gGame.secsPassed);
+      updateBestTime(gGame.secsPassed);
+    }
   }
-
 }
 
 function resetVaribles() {
   if (gTimerInterval) clearInterval(gTimerInterval);
   gTimerInterval = 0;
   gBoard = [];
-  gPlayerState.lives = ['🤎', '🤎', '🤎'];
-  gPlayerState.hits = ['💡', '💡', '💡'];
+  gPlayerState.lives = ["🤎", "🤎", "🤎"];
+  gPlayerState.hits = ["💡", "💡", "💡"];
   gGame.secsPassed = 0;
   gGame.shownCount = 0;
   gGame.secsPassed = 0;
   gGame.markedCount = 0;
-  gGame.isOn = true;
+  gGame.isOn = false;
   gGame.isFirstClick = true;
+  gPlayerState.safeClick = 3;
+  if (gLevel.SIZE === 4) gLevel.MINES = 2;
+  if (gLevel.SIZE === 8) gLevel.MINES = 12;
+  if (gLevel.SIZE === 12) gLevel.MINES = 30;
+}
+
+function safeClick() {
+  if (!gGame.isOn) return;
+  if (!gPlayerState.safeClick) return;
+  var randCol = getRandomIntInclusive(0, gBoard.length - 1);
+  var randRow = getRandomIntInclusive(0, gBoard.length - 1);
+  while (gBoard[randRow][randCol].isMine || gBoard[randRow][randCol].isShown) {
+    randCol = getRandomIntInclusive(0, gBoard.length - 1);
+    randRow = getRandomIntInclusive(0, gBoard.length - 1);
+  }
+  var elCell = document.querySelector(`.cell-${randRow}-${randCol}`);
+  elCell.innerText = gBoard[randRow][randCol].minesAroundCount;
+  setTimeout(function () {
+    elCell.innerText = '';
+    warning.innerText = '';
+  }, 1000)
+  gPlayerState.safeClick--;
+  var warning = document.querySelector('.game-buttons p');
+  warning.innerText = `${gPlayerState.safeClick} has left!!`
 }
