@@ -21,9 +21,9 @@
         </div>
         <div class="properties">
             <label class="options-label" for="">Choose Your Level:</label>
-            <button class="level-btn" data-num="4,2" onclick="levelClick(this)">Beginner</button>
-            <button class=" level-btn" data-num="8,12" onclick="levelClick(this)">Medium</button>
-            <button class="level-btn" data-num="12,30" onclick="levelClick(this)">Expert</button>
+            <button class="btn" data-num="4,2" onclick="levelClick(this)">Beginner</button>
+            <button class="btn" data-num="8,12" onclick="levelClick(this)">Medium</button>
+            <button class="btn" data-num="12,30" onclick="levelClick(this)">Expert</button>
         </div>
         <div class="information">
             <div class="lives">
@@ -48,8 +48,16 @@
 
             </table>
         </div>
+        <div class="game-buttons">
+            <button onclick="safeClick()" class="btn">Safe Click</button>
+            <button onclick="undoClick()" class="btn">Undo</button>
+            <p></p>
+        </div>
+        <div class="best-time">
+            <p></p>
+        </div>
     </section>
-    <section class="modal"></section>
+
     <script src="./js/util.js"></script>
     <script src="./js/main.js"></script>
 </body>
