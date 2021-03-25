@@ -30,7 +30,7 @@ h1 {
     background-color: rgb(165, 161, 147);
     color: rgb(100, 99, 94);
     padding: 5px;
-    margin: 0 50px;
+    margin: 0 40px;
 }
 
 .options-label {
@@ -73,7 +73,7 @@ h1 {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
 }
 
 .restart-btn {
