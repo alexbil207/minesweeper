@@ -169,7 +169,8 @@ function showHint(row, col) {
     for (var j = col - 1; j <= col + 1; j++) {
       if (j < 0 || j >= gBoard[i].length) continue;
       var elCell = document.querySelector(`.cell-${i}-${j}`);
-      elCell.innerText = gBoard[i][j].minesAroundCount;
+      if (!gBoard[i][j].minesAroundCount) elCell.innerText = gPlayerState.mine;
+      else elCell.innerText = gBoard[i][j].minesAroundCount;
     }
   }
   // close all celles after 1s
