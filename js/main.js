@@ -9,6 +9,7 @@ const gPlayerState = {
   mineMark: '🚩',
   mine: '💣',
   isFirstClick: true,
+  isHint: false
 };
 // object with game data
 const gGame = {
@@ -55,7 +56,6 @@ function renderBoard() {
   gElTable.innerHTML = strHTML;
 }
 
-
 function cellClick(cell) {
   // cheking and changing each cell
   var location = cell.classList.value.split('-');
@@ -64,43 +64,49 @@ function cellClick(cell) {
 
   if (!gGame.isOn) return;
 
-  if (cell.classList.value.includes('empty')) return
+  if (cell.classList.value.includes('empty')) return // empty click protection
 
-  if (!gTimerInterval) gTimerInterval = setInterval(timer, 1000);
+  if (!gTimerInterval) gTimerInterval = setInterval(timer, 1000); // interval on
 
-  if (gPlayerState.isFirstClick) {
+  if (gPlayerState.isHint) {
+    showHint(row, col); // hint click
+    return;
+  }
+
+  if (gPlayerState.isFirstClick) { //first click update
     setMines(row, col);
     setNegsCount();
   }
 
   gPlayerState.isFirstClick = false;
 
-  if (gBoard[row][col].isShown || gBoard[row][col].isMarked) return;
+  if (gBoard[row][col].isShown || gBoard[row][col].isMarked) return; // marked and shown click protection
 
 
-  if (!gBoard[row][col].minesAroundCount && !gBoard[row][col].isMine) {
+  if (!gBoard[row][col].minesAroundCount && !gBoard[row][col].isMine) { // empty click recurtion
     cell.classList.add('empty');
     revealNegs(row, col); //Open all empty
   }
 
-  if (gBoard[row][col].isMine) {
+  if (gBoard[row][col].isMine) { //mine click reveal
     gPlayerState.lives.pop();
     updateGamerLives(gPlayerState.lives);
     cell.innerText = gPlayerState.mine;
   }
 
-  if (!gPlayerState.lives.length) {
+  if (!gPlayerState.lives.length) { //end of lives
     gameOver();
   }
 
-  if (gBoard[row][col].minesAroundCount) cell.innerText = gBoard[row][col].minesAroundCount;
+  if (gBoard[row][col].minesAroundCount) cell.innerText = gBoard[row][col].minesAroundCount; // show number
 
-  gBoard[row][col].isShown = true;
+  gBoard[row][col].isShown = true; //update state
 
-  gGame.shownCount++;
+  gGame.shownCount++; //update shown counter
 
   checkWinning();
 }
+
 function setNegsCount() {
   //loop over the board to set up cells data
   for (var i = 0; i < gLevel.SIZE; i++) {
@@ -121,7 +127,6 @@ function negsCount(row, col) {
       if (gBoard[i][j].isMine) mineCount++;
     }
   }
-  console.log(mineCount);
   return mineCount;
 }
 
@@ -146,7 +151,34 @@ function updateHints() {
   // update and check the hints
   gPlayerState.hits.pop();
   updateGamerHints(gPlayerState.hits);
+  gPlayerState.isHint = true;
 }
+
+function showHint(row, col) {
+  // if (!gPlayerState.hits.length) return;
+  // reveal the cells
+  for (var i = row - 1; i <= row + 1; i++) {
+    if (i < 0 || i >= gBoard.length) continue;
+    for (var j = col - 1; j <= col + 1; j++) {
+      var elCell = document.querySelector(`.cell-${i}-${j}`)
+      elCell.innerText = gBoard[i][j].minesAroundCount;
+    }
+  }
+  // close all celles after 1s
+  setTimeout(function () {
+    for (var i = row - 1; i <= row + 1; i++) {
+      if (i < 0 || i >= gBoard.length) continue;
+      for (var j = col - 1; j <= col + 1; j++) {
+        if (j < 0 || j >= gBoard[i].length) continue;
+        if (gBoard[i][j].isShown) continue;
+        var elCell = document.querySelector(`.cell-${i}-${j}`)
+        elCell.innerText = '';
+      }
+    }
+  }, 1000)
+  gPlayerState.isHint = false;
+}
+
 
 function timer() {
   //main timer func

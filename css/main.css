@@ -68,8 +68,8 @@ h1 {
 .information {
     margin: 10px;
     margin-left: 20px;
-    width: 500px;
-    height: 50px;
+    width: 80%;
+    height: 10%;
     display: flex;
     flex-direction: row;
     align-items: center;
