@@ -155,6 +155,7 @@ function setMines(currRow, currCol) {
 }
 
 function updateHints() {
+  if(!gGame.isOn) return
   // update and check the hints
   gPlayerState.hits.pop();
   updateGamerHints(gPlayerState.hits);
@@ -281,6 +282,7 @@ function resetVaribles() {
   gGame.isOn = false;
   gGame.isFirstClick = true;
   gPlayerState.safeClick = 3;
+  gPlayerState.steps = [];
   if (gLevel.SIZE === 4) gLevel.MINES = 2;
   if (gLevel.SIZE === 8) gLevel.MINES = 12;
   if (gLevel.SIZE === 12) gLevel.MINES = 30;
