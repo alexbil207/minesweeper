@@ -57,7 +57,7 @@ function isEmptyCell(row, col) {
 function restartGame() {
   // retart the game
   gTimer.innerText = '00';
-  debugger
+  gPlayerState.isFirstClick = true;
   resetVaribles();
   initGame();
 }
