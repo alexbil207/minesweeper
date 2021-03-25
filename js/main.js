@@ -12,7 +12,8 @@ const gPlayerState = {
   mine: "💣",
   isFirstClick: true,
   isHint: false,
-  safeClick: 3
+  safeClick: 3,
+  steps: []
 };
 // object with game data
 const gGame = {
@@ -109,7 +110,7 @@ function cellClick(cell) {
   gBoard[row][col].isShown = true; //update state
 
   gGame.shownCount++; //update shown counter
-
+  gPlayerState.steps.push([row, col]);
   checkWinning();
 }
 
@@ -195,6 +196,7 @@ function timer() {
 function flagClick(cell) {
   // right click mouse flag
   event.preventDefault();
+  if (!gGame.isOn) return;
   if (cell.classList.value.includes("empty")) return;
   var location = cell.classList.value.split("-");
   var row = location[1];
@@ -301,4 +303,16 @@ function safeClick() {
   gPlayerState.safeClick--;
   var warning = document.querySelector('.game-buttons p');
   warning.innerText = `${gPlayerState.safeClick} has left!!`
+}
+
+function undoClick() {
+  if (!gGame.isOn) return;
+  if (!gPlayerState.steps) return;
+  var lastCellStep = gPlayerState.steps.pop();
+  var elcell = document.querySelector(`.cell-${lastCellStep[0]}-${lastCellStep[1]}`);
+  elcell.innerText = '';
+  if (elcell.classList.value.includes('empty')) elcell.classList.remove('empty');
+  gBoard[lastCellStep[0]][lastCellStep[1]].isShown = false;
+  gGame.shownCount--;
+
 }
