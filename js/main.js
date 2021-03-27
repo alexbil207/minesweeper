@@ -60,7 +60,7 @@ function renderBoard() {
 }
 
 function cellClick(cell) {
-  // cheking and changing each cell
+  // checking and changing each cell
   var location = cell.classList.value.split('-');
   var row = +location[1];
   var col = +location[2];
@@ -170,7 +170,8 @@ function showHint(row, col) {
     for (var j = col - 1; j <= col + 1; j++) {
       if (j < 0 || j >= gBoard[i].length) continue;
       var elCell = document.querySelector(`.cell-${i}-${j}`);
-      if (!gBoard[i][j].minesAroundCount) elCell.innerText = gPlayerState.mine;
+      if (gBoard[i][j].isMine) elCell.innerText = gPlayerState.mine;
+      if (!gBoard[i][j].minesAroundCount) elCell.innerText = '';
       else elCell.innerText = gBoard[i][j].minesAroundCount;
     }
   }
