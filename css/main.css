@@ -44,11 +44,7 @@ h1 {
 .btn {
   font-family: "Roboto", sans-serif;
   box-shadow: -2px 2px 0px -20px #899599;
-  background: linear-gradient(
-    to bottom,
-    rgb(250, 248, 239) 5%,
-    rgb(165, 161, 147) 100%
-  );
+  background: linear-gradient( to bottom, rgb(250, 248, 239) 5%, rgb(165, 161, 147) 100%);
   background-color: rgb(250, 248, 239);
   border: 1px solid rgb(165, 161, 147);
   color: rgb(100, 99, 94);
@@ -59,19 +55,12 @@ h1 {
   margin: 0 10px;
 }
 
-.btn:hover,
-.restart-btn:hover,
-td:hover {
-  background: linear-gradient(
-    to bottom,
-    rgb(165, 161, 147) 5%,
-    rgb(250, 248, 239) 100%
-  );
+.btn:hover, .restart-btn:hover, td:hover {
+  background: linear-gradient( to bottom, rgb(165, 161, 147) 5%, rgb(250, 248, 239) 100%);
   background-color: rgb(165, 161, 147);
 }
 
-.btn:active,
-.restart-btn:active {
+.btn:active, .restart-btn:active {
   position: relative;
   top: 2px;
 }
@@ -93,15 +82,13 @@ td:hover {
   font-size: 1.2rem;
 }
 
-.timer,
-.mines {
+.timer, .mines {
   width: 50px;
   height: 30px;
   text-align: center;
 }
 
-.hints,
-.lives {
+.hints, .lives {
   width: 75px;
   height: 30px;
   cursor: pointer;
@@ -126,6 +113,6 @@ td {
   background-color: rgb(141, 141, 141);
 }
 
-.best-time{
-    margin: 10px;
+.best-time {
+  margin: 10px;
 }

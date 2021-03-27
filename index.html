@@ -2,64 +2,67 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MineSweeper</title>
-    <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
-    <!-- Google Fonts CDN-->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-    <!-- CSS Style -->
-    <link rel="stylesheet" href="./css/main.css">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MineSweeper</title>
+  <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon" />
+  <!-- Google Fonts CDN-->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
+  <!-- CSS Style -->
+  <link rel="stylesheet" href="./css/main.css" />
 </head>
 
 <body>
-    <section class="container">
-        <div class="header">
-            <h1>MineSweeper</h1>
-        </div>
-        <div class="properties">
-            <label class="options-label" for="">Choose Your Level:</label>
-            <button class="btn" data-num="4,2" onclick="levelClick(this)">Beginner</button>
-            <button class="btn" data-num="8,12" onclick="levelClick(this)">Medium</button>
-            <button class="btn" data-num="12,30" onclick="levelClick(this)">Expert</button>
-        </div>
-        <div class="information">
-            <div class="lives">
-                <p>000</p>
-            </div>
-            <div class="box mines">
-                <p>0</p>
-            </div>
-            <div class="state">
-                <button class="restart-btn" onclick="restartGame()">0</button>
-            </div>
-            <div class="box timer">
-                <p>00s</p>
-            </div>
-            <div onclick="updateHints()" class="hints">
-                <p>000</p>
-            </div>
+  <section class="container">
+    <div class="header">
+      <h1>MineSweeper</h1>
+    </div>
+    <div class="properties">
+      <label class="options-label" for="">Choose Your Level:</label>
+      <button class="btn" data-num="4,2" onclick="levelClick(this)">
+        Beginner
+      </button>
+      <button class="btn" data-num="8,12" onclick="levelClick(this)">
+        Medium
+      </button>
+      <button class="btn" data-num="12,30" onclick="levelClick(this)">
+        Expert
+      </button>
+    </div>
+    <div class="information">
+      <div class="lives">
+        <p>000</p>
+      </div>
+      <div class="box mines">
+        <p>0</p>
+      </div>
+      <div class="state">
+        <button class="restart-btn" onclick="restartGame()">0</button>
+      </div>
+      <div class="box timer">
+        <p>00s</p>
+      </div>
+      <div onclick="updateHints()" class="hints">
+        <p>000</p>
+      </div>
+    </div>
+    <div class="game">
+      <table></table>
+    </div>
+    <div class="game-buttons">
+      <button onclick="safeClick()" class="btn">Safe Click</button>
+      <button onclick="undoClick()" class="btn">Undo</button>
+      <p></p>
+    </div>
+    <div class="best-time">
+      <p></p>
+    </div>
+  </section>
 
-        </div>
-        <div class="game">
-            <table>
-
-            </table>
-        </div>
-        <div class="game-buttons">
-            <button onclick="safeClick()" class="btn">Safe Click</button>
-            <button onclick="undoClick()" class="btn">Undo</button>
-            <p></p>
-        </div>
-        <div class="best-time">
-            <p></p>
-        </div>
-    </section>
-
-    <script src="./js/util.js"></script>
-    <script src="./js/main.js"></script>
+  <script src="./js/util.js"></script>
+  <script src="./js/main.js"></script>
 </body>
 
 </html>

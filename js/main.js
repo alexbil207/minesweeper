@@ -1,19 +1,19 @@
-"use strict";
+'use strict';
 
-localStorage.setItem("bestTime", 0);
+localStorage.setItem('bestTime', 0);
 // object that holds all gamer states
 const gPlayerState = {
-  inGame: "😀",
-  winner: "😎",
-  dead: "💀",
-  lives: ["🤎", "🤎", "🤎"],
-  hits: ["💡", "💡", "💡"],
-  mineMark: "🚩",
-  mine: "💣",
+  inGame: '😀',
+  winner: '😎',
+  dead: '💀',
+  lives: ['🤎', '🤎', '🤎'],
+  hits: ['💡', '💡', '💡'],
+  mineMark: '🚩',
+  mine: '💣',
   isFirstClick: true,
   isHint: false,
   safeClick: 3,
-  steps: []
+  steps: [],
 };
 // object with game data
 const gGame = {
@@ -30,10 +30,10 @@ const gLevel = {
 // global varibales
 var gTimerInterval;
 var gBoard = [];
-var gElTable = document.querySelector("table");
-var gTimer = document.querySelector(".timer p");
+var gElTable = document.querySelector('table');
+var gTimer = document.querySelector('.timer p');
 
-window.addEventListener("load", initGame); // waiting to html to load
+window.addEventListener('load', initGame); // waiting to html to load
 
 function initGame() {
   // main functions that turns the game on
@@ -47,27 +47,27 @@ function initGame() {
 
 function renderBoard() {
   // render board with given logic
-  var strHTML = "";
+  var strHTML = '';
   for (var i = 0; i < gLevel.SIZE; i++) {
-    strHTML += "<tr>";
+    strHTML += '<tr>';
     for (var j = 0; j < gLevel.SIZE; j++) {
       strHTML += `<td class='cell-${i}-${j}' onclick='cellClick(this)' 
                 oncontextmenu='flagClick(this)'></td > `;
     }
-    strHTML += "</tr>";
+    strHTML += '</tr>';
   }
   gElTable.innerHTML = strHTML;
 }
 
 function cellClick(cell) {
   // cheking and changing each cell
-  var location = cell.classList.value.split("-");
+  var location = cell.classList.value.split('-');
   var row = +location[1];
   var col = +location[2];
 
   gGame.isOn = true;
 
-  if (cell.classList.value.includes("empty")) return; // empty click protection
+  if (cell.classList.value.includes('empty')) return; // empty click protection
 
   if (!gTimerInterval) gTimerInterval = setInterval(timer, 950); // interval on
 
@@ -88,7 +88,7 @@ function cellClick(cell) {
 
   if (!gBoard[row][col].minesAroundCount && !gBoard[row][col].isMine) {
     // empty click recurtion
-    cell.classList.add("empty");
+    cell.classList.add('empty');
     revealNegs(row, col); //Open all empty
   }
 
@@ -155,8 +155,8 @@ function setMines(currRow, currCol) {
 }
 
 function updateHints() {
-  if(!gGame.isOn) return
   // update and check the hints
+  if (!gGame.isOn) return;
   gPlayerState.hits.pop();
   updateGamerHints(gPlayerState.hits);
   gPlayerState.isHint = true;
@@ -182,7 +182,7 @@ function showHint(row, col) {
         if (j < 0 || j >= gBoard[i].length) continue;
         if (gBoard[i][j].isShown) continue;
         var elCell = document.querySelector(`.cell-${i}-${j}`);
-        elCell.innerText = "";
+        elCell.innerText = '';
       }
     }
   }, 1000);
@@ -199,8 +199,8 @@ function flagClick(cell) {
   // right click mouse flag
   event.preventDefault();
   if (!gGame.isOn) return;
-  if (cell.classList.value.includes("empty")) return;
-  var location = cell.classList.value.split("-");
+  if (cell.classList.value.includes('empty')) return;
+  var location = cell.classList.value.split('-');
   var row = location[1];
   var col = location[2];
   if (gBoard[row][col].isShown) return;
@@ -209,7 +209,7 @@ function flagClick(cell) {
     if (gBoard[row][col].isMine) gGame.markedCount--;
     gLevel.MINES++;
     updateMinesCount();
-    cell.innerText = "";
+    cell.innerText = '';
   } else {
     if (!gLevel.MINES) return;
     gBoard[row][col].isMarked = true;
@@ -261,9 +261,9 @@ function checkWinning() {
     gGame.isOn = false;
     clearInterval(gTimerInterval);
     updateGamerState(gPlayerState.winner);
-    var bestTime = +localStorage.getItem("bestTime");
+    var bestTime = +localStorage.getItem('bestTime');
     if (bestTime > gGame.secsPassed || bestTime === 0) {
-      localStorage.setItem("bestTime", gGame.secsPassed);
+      localStorage.setItem('bestTime', gGame.secsPassed);
       updateBestTime(gGame.secsPassed);
     }
   }
@@ -273,8 +273,8 @@ function resetVaribles() {
   if (gTimerInterval) clearInterval(gTimerInterval);
   gTimerInterval = 0;
   gBoard = [];
-  gPlayerState.lives = ["🤎", "🤎", "🤎"];
-  gPlayerState.hits = ["💡", "💡", "💡"];
+  gPlayerState.lives = ['🤎', '🤎', '🤎'];
+  gPlayerState.hits = ['💡', '💡', '💡'];
   gGame.secsPassed = 0;
   gGame.shownCount = 0;
   gGame.secsPassed = 0;
@@ -282,7 +282,6 @@ function resetVaribles() {
   gGame.isOn = false;
   gGame.isFirstClick = true;
   gPlayerState.safeClick = 3;
-  gPlayerState.steps = [];
   if (gLevel.SIZE === 4) gLevel.MINES = 2;
   if (gLevel.SIZE === 8) gLevel.MINES = 12;
   if (gLevel.SIZE === 12) gLevel.MINES = 30;
@@ -302,20 +301,22 @@ function safeClick() {
   setTimeout(function () {
     elCell.innerText = '';
     warning.innerText = '';
-  }, 1000)
+  }, 1000);
   gPlayerState.safeClick--;
   var warning = document.querySelector('.game-buttons p');
-  warning.innerText = `${gPlayerState.safeClick} has left!!`
+  warning.innerText = `${gPlayerState.safeClick} has left!!`;
 }
 
 function undoClick() {
   if (!gGame.isOn) return;
   if (!gPlayerState.steps) return;
   var lastCellStep = gPlayerState.steps.pop();
-  var elcell = document.querySelector(`.cell-${lastCellStep[0]}-${lastCellStep[1]}`);
+  var elcell = document.querySelector(
+    `.cell-${lastCellStep[0]}-${lastCellStep[1]}`
+  );
   elcell.innerText = '';
-  if (elcell.classList.value.includes('empty')) elcell.classList.remove('empty');
+  if (elcell.classList.value.includes('empty'))
+    elcell.classList.remove('empty');
   gBoard[lastCellStep[0]][lastCellStep[1]].isShown = false;
   gGame.shownCount--;
-
 }
