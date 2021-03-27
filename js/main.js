@@ -171,7 +171,6 @@ function showHint(row, col) {
       if (j < 0 || j >= gBoard[i].length) continue;
       var elCell = document.querySelector(`.cell-${i}-${j}`);
       if (gBoard[i][j].isMine) elCell.innerText = gPlayerState.mine;
-      if (!gBoard[i][j].minesAroundCount) elCell.innerText = '';
       else elCell.innerText = gBoard[i][j].minesAroundCount;
     }
   }
